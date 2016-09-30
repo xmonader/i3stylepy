@@ -135,6 +135,9 @@ def apply_theme_to_config(themeyaml, configstring):
     for line in configstring.splitlines():
         if "client." in line:
             continue #will be pushed later
+        if not line.strip():
+            mergedconfig += "\n"
+            continue
 
         if line.strip().startswith("#"):
             mergedconfig += line + "\n"
@@ -149,7 +152,9 @@ def apply_theme_to_config(themeyaml, configstring):
     #dump client. templates.
     for k, v in window_colors.items():
         mergedconfig += t_windowcolors.format(state=k, border=solve_color(v, 'border'), background=solve_color(v, 'background'), text=solve_color(v, 'text'), indicator=solve_color(v,'indicator'))
-
+    
+    #sane newlines
+    mergedconfig = re.sub("(\n\n)+", "\n", mergedconfig)
     return mergedconfig
 
 def applytheme(themefile, configfile):
