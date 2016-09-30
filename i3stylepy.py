@@ -163,13 +163,14 @@ def applytheme(themefile, configfile):
         with open(configfile) as cf:
             return apply_theme_to_config(tf.read(), cf.read())
 
-def listthemes(themeshome=None):
+def print_available_themes(themeshome=None):
     if themeshome is None:
         themeshome = os.path.join(os.path.dirname(__file__), 'themes')
     if os.path.exists(themeshome):
+        import pdb; pdb.set_trace()
         for e in os.listdir(themeshome):
-            if os.path.isfile(e):
-                pfrint (" - ", e)
+            if os.path.isfile(os.path.join(themeshome, e)):
+                print (" - ", e)
     else:
         print("No available themes")
 
@@ -200,12 +201,13 @@ def console2():
     applyparser.add_argument('-c', '--config', dest='config')
     applyparser.add_argument('-o', '--output', dest="output")
     listparser = subparsers.add_parser('list')
+    listparser.set_defaults(func=print_available_themes)
     extractparser = subparsers.add_parser('extract')
     extractparser.add_argument('-c', '--config', dest='config')
     extractparser.add_argument('-o', '--output', dest='output')
     args = parser.parse_args()
     if args.subparsers == "list":
-        listthemes()
+        args.func()
     elif args.subparsers == "apply":
         theme = args.theme
         config = args.config
