@@ -217,8 +217,9 @@ def console2():
         theme = args.theme
         config = args.config
         output = args.output
+        newconf = applytheme(theme, config)
         with open(output, "w") as outf:
-            outf.write(applytheme(theme, config))
+            outf.write(newconf)
     elif args.subparsers == "extract":
         config = args.config
         output = args.output
